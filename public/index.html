@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delivery Policy Flashcards</title>
+    <meta name="description" content="Answer delivery policy questions by entering your work email and classifying each delivery." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Animated background orbs -->
+    <div class="bg-orbs" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+      <div class="loader-card">
+        <div class="spinner"></div>
+        <p id="loader-text" class="loader-text">Loading…</p>
+      </div>
+    </div>
+
+    <main class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo-row">
+          <div class="logo-icon-wrapper">
+            <span class="logo-icon">📦</span>
+          </div>
+          <div>
+            <h1 class="title">Delivery Policy Flashcards</h1>
+            <p class="subtitle">Classify each delivery with the correct policy. Your answers are saved automatically.</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Screen 1: Email Entry -->
+      <section id="screen-email" class="panel glass-panel">
+        <div class="panel-header">
+          <div class="panel-icon">✉️</div>
+          <h2 class="panel-title">Get Started</h2>
+        </div>
+        <p class="panel-desc">Enter your work email to load your personalised set of deliveries.</p>
+        <form id="email-form" class="stack" novalidate>
+          <div class="field">
+            <label class="label" for="input-email">Work email address</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <input
+                id="input-email"
+                name="email"
+                class="input"
+                type="email"
+                placeholder="yourname@company.com"
+                autocomplete="email"
+                spellcheck="false"
+              />
+            </div>
+          </div>
+          <p id="email-error" class="hint error" role="alert" aria-live="polite"></p>
+          <button class="button button-primary button-lg" type="submit" id="start-btn">
+            <span>Start Flashcards</span>
+            <svg class="btn-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- Screen 2: Flashcard -->
+      <section id="screen-card" class="hidden">
+        <!-- Top bar -->
+        <div class="topbar">
+          <div class="meta">
+            <div class="pill pill-progress" id="progress-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>0 / 0</span>
+            </div>
+            <div class="pill pill-email" id="email-badge" title=""></div>
+          </div>
+          <button class="button button-ghost button-sm" id="change-email-btn" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14 4 9l5-5"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+            Change email
+          </button>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+          <div class="progress-glow" id="progress-glow"></div>
+        </div>
+
+        <!-- Card -->
+        <article class="card" id="flashcard">
+          <div class="card-head">
+            <div class="card-badge">
+              <span class="card-badge-dot"></span>
+              Delivery to classify
+            </div>
+            <p class="card-id" id="card-id"></p>
+          </div>
+
+          <div class="card-body">
+            <div class="description-box" id="card-description"></div>
+            <div class="attrs-grid" id="card-attrs"></div>
+          </div>
+        </article>
+
+        <!-- Answer area -->
+        <div class="answer-panel glass-panel">
+          <p class="answer-label">What policy applies to this delivery?</p>
+          <div id="policy-chips" class="chips-row"></div>
+          <p id="answer-status" class="hint" role="status" aria-live="polite"></p>
+          <div class="action-row">
+            <button class="button button-ghost" id="skip-btn" type="button">
+              Skip
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m13 17 5-5-5-5"/><path d="m6 17 5-5-5-5"/></svg>
+            </button>
+            <button class="button button-primary" id="submit-btn" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Submit Answer
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 3: Done -->
+      <section id="screen-done" class="panel glass-panel hidden done-panel">
+        <div class="done-icon">🎉</div>
+        <h2 class="panel-title">All done!</h2>
+        <p id="done-stats" class="done-stats"></p>
+        <p class="panel-desc">Thank you for classifying your deliveries. You can restart to review a new shuffled set from any remaining unassigned rows.</p>
+        <button class="button button-primary" id="done-restart-btn" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Start over
+        </button>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
