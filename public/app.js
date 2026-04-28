@@ -99,6 +99,12 @@ function parseCsv(csv) {
   });
 }
 
+// ... existing code ...
+const savedEmail = localStorage.getItem("delivery_app_email");
+if (savedEmail) {
+  emailInput.value = savedEmail;
+}
+
 async function startSession() {
   const email = normalizeEmail(emailInput.value);
   if (!email || !email.includes("@")) {
@@ -106,6 +112,7 @@ async function startSession() {
     return;
   }
   
+  localStorage.setItem("delivery_app_email", email);
   state.email = email;
   setLoading(true, "Fetching delivery data...");
   
