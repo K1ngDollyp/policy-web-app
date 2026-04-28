@@ -216,36 +216,34 @@ async function submitAnswer() {
   const selected = document.querySelectorAll(".chip.selected");
   if (selected.length === 0) return;
   
-  // Join multiple answers with a comma
   const policy = Array.from(selected).map(c => c.textContent).join(", ");
   const row = state.assignedRows[state.currentIndex];
   
-  setLoading(true, "Saving response...");
-  try {
-    const res = await fetch("/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: state.email,
-        delivery_id: row.delivery_id,
-        policy: policy
-      })
-    });
-    
-    const data = await res.json();
-    if (!res.ok || !data.ok) {
-      throw new Error(data.error || "Failed to save response.");
+  // OPTIMISTIC UPDATE: Move to next card immediately
+  state.savedCount++;
+  state.currentIndex++;
+  renderCard();
+  
+  // Background Save
+  fetch("/api/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: state.email,
+      delivery_id: row.delivery_id,
+      policy: policy
+    })
+  }).then(res => res.json()).then(data => {
+    if (!data.ok) {
+      console.error("Background save failed:", data.error);
+      answerStatus.textContent = "Warning: Last answer failed to save. " + data.error;
+      answerStatus.className = "hint error";
     }
-    
-    state.savedCount++;
-    state.currentIndex++;
-    renderCard();
-  } catch (err) {
-    answerStatus.textContent = err.message;
+  }).catch(err => {
+    console.error("Background save error:", err);
+    answerStatus.textContent = "Connection error. Last answer might not have saved.";
     answerStatus.className = "hint error";
-  } finally {
-    setLoading(false);
-  }
+  });
 }
 
 function finishSession() {
