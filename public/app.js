@@ -181,7 +181,7 @@ function renderCard() {
     { key: "Distance", val: row.distance ? `${row.distance} km` : "N/A" },
     { key: "Weight", val: row.weight ? `${row.weight} kg` : "N/A" },
     { key: "Packages", val: row.no_of_package || "N/A" },
-    { key: "Value", val: row.package_value ? `$${row.package_value}` : "N/A" },
+    { key: "Value", val: row.package_value || "N/A" },
     { key: "Type", val: row.package_type || "N/A" }
   ];
   
