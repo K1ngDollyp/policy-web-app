@@ -182,6 +182,7 @@ function renderCard() {
     { key: "Weight", val: row.weight ? `${row.weight} kg` : "N/A" },
     { key: "Packages", val: row.no_of_package || "N/A" },
     { key: "Value", val: row.package_value || "N/A" },
+    { key: "Handling", val: row.handling || "N/A" },
     { key: "Type", val: row.package_type || "N/A" }
   ];
   
