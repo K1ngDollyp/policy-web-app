@@ -61,6 +61,12 @@ function handleSubmit(params) {
 
   for (let i = 1; i < data.length; i++) {
     if (String(data[i][idxId]).trim() === deliveryId) {
+      // SAFETY CHECK: If someone already filled this, don't overwrite
+      const currentPolicy = String(data[i][idxPolicy] || "").trim();
+      if (currentPolicy.length > 0) {
+        return jsonOut({ ok: false, error: "This delivery was just classified by another user." });
+      }
+      
       sheet.getRange(i + 1, idxPolicy + 1).setValue(policy);
       sheet.getRange(i + 1, idxEmail + 1).setValue(email);
       return jsonOut({ ok: true, row: i + 1 });
