@@ -11,7 +11,7 @@ const SCRIPT_URL = process.env.GOOGLE_APPS_SCRIPT_URL || "";
 const KEEP_WARM_MS = Number(process.env.KEEP_WARM_INTERVAL_MS || 240_000); // 4 minutes
 const SHEET_ID = "1pV5sz5PJTTaGvXbUNAVqwWB_-eAC2B5bTe1XEo5tgT4";
 
-app.get("/api/config", (_req, res) => {
+app.get("/config", (_req, res) => {
   res.json({
     googleAppsScriptUrlConfigured: Boolean(SCRIPT_URL),
     urlSnippet: SCRIPT_URL ? SCRIPT_URL.slice(0, 30) + "..." : "not set"
@@ -27,7 +27,7 @@ async function keepWarm() {
   }
 }
 
-app.post("/api/user-config", async (req, res) => {
+app.post("/user-config", async (req, res) => {
   try {
     if (!SCRIPT_URL) {
       res.status(500).json({ ok: false, error: "Missing GOOGLE_APPS_SCRIPT_URL" });
@@ -50,7 +50,7 @@ app.post("/api/user-config", async (req, res) => {
   }
 });
 
-app.post("/api/submit", async (req, res) => {
+app.post("/submit", async (req, res) => {
   try {
     if (!SCRIPT_URL) {
       res.status(500).json({ ok: false, error: "Server is missing GOOGLE_APPS_SCRIPT_URL." });
@@ -85,7 +85,7 @@ app.post("/api/submit", async (req, res) => {
   }
 });
 
-app.get("/api/sheet", async (_req, res) => {
+app.get("/sheet", async (_req, res) => {
   try {
     const controller = new AbortController();
     const t = setTimeout(() => controller.abort(), 20_000);
@@ -110,7 +110,13 @@ app.get("/api/sheet", async (_req, res) => {
   }
 });
 
-app.use(express.static("public"));
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "../public")));
 
 // Export the app for Vercel
 export default app;
