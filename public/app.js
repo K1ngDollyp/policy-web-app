@@ -36,7 +36,7 @@ let state = {
   assignedRows: [],
   currentIndex: 0,
   savedCount: 0,
-  quota: 2000, // Updated to 2000 as per request
+  quota: 2500, // Updated to 2500 as per request
   policyOptions: ["Car", "Bike", "Commuter"]
 };
 

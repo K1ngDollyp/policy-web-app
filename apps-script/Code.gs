@@ -77,7 +77,7 @@ function handleSubmit(params) {
 }
 
 function handleGetConfig(params) {
-  return jsonOut({ ok: true, quota: 2000 });
+  return jsonOut({ ok: true, quota: 2500 });
 }
 
 function jsonOut(obj) {
