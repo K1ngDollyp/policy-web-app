@@ -12,6 +12,57 @@ const emailForm = $("#email-form");
 const emailInput = $("#input-email");
 const emailError = $("#email-error");
 const startBtn = $("#start-btn");
+const exportBtn = document.getElementById("exportBtn");
+
+exportBtn.addEventListener("click", exportData);
+
+async function exportData() {
+  const password = prompt("Enter Admin Password to export data:");
+  if (password !== "admin123") {
+    alert("Incorrect password.");
+    return;
+  }
+
+  try {
+    exportBtn.disabled = true;
+    exportBtn.textContent = "Exporting...";
+    
+    const res = await fetch("/api/sheet");
+    if (!res.ok) throw new Error("Failed to fetch sheet data.");
+    
+    const csvText = await res.text();
+    const rows = parseCsv(csvText);
+    
+    // Filter rows that have a policy
+    const filled = rows.filter(r => String(r.policy || "").trim().length > 0);
+    
+    if (filled.length === 0) {
+      alert("No classified entries found to export.");
+      return;
+    }
+    
+    // Convert back to CSV
+    const headers = Object.keys(filled[0]);
+    const csvContent = [
+      headers.join(","),
+      ...filled.map(row => headers.map(h => `"${String(row[h] || "").replace(/"/g, '""')}"`).join(","))
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", `classified_deliveries_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+  } catch (err) {
+    alert("Export failed: " + err.message);
+  } finally {
+    exportBtn.disabled = false;
+    exportBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Export Data`;
+  }
+}
 
 // Card elements
 const cardDescription = $("#card-description");
@@ -36,7 +87,7 @@ let state = {
   assignedRows: [],
   currentIndex: 0,
   savedCount: 0,
-  quota: 2500, // Updated to 2500 as per request
+  quota: 4000, // Updated to 4000 as per request
   policyOptions: ["Car", "Bike", "Commuter"]
 };
 

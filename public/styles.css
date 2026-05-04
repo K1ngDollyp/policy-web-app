@@ -76,6 +76,34 @@ body {
   to { transform: translate(100px, 100px); }
 }
 
+.admin-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  gap: 0.5rem;
+}
+
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.card-container {
+  max-width: 600px;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
 .container {
   max-width: 600px;
   margin: 4rem auto;
